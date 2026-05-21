@@ -42,12 +42,13 @@ model FoodCategories {
   foods        Foods[]
 }
 
-model Foods {
+ model Foods {
   id           String         @id @default(nanoid())
   foodName     String
   price        Float
   image        String?
   ingredients  String?
+  foodDescription String ?
   categoryId   String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
