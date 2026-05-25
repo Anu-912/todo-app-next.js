@@ -1,17 +1,34 @@
-import Image from "next/image";
-import { Header } from "./components/Header";
-import { Footer } from "./components/Footer";
+import type { Metadata } from "next";
+import { Bebas_Neue, Inter } from "next/font/google";
+import "./globals.css";
 
-export default function Home() {
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const bebas = Bebas_Neue({
+  variable: "--font-bebas",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+export const metadata: Metadata = {
+  title: "NomNom — Swift delivery",
+  description: "Fresh. Fast. Delivered. Order food from your favorite spots.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <div className='bg-[#71717A] w-full h-screen '>
-      <Header />
-      <img
-        className='w-full '
-        src='./icons/Image÷.png'
-        alt=''
-      />
-      <Footer />
-    </div>
+    <html
+      lang='en'
+      className={`${inter.variable} ${bebas.variable} h-full antialiased`}
+    >
+      <body className='min-h-full flex flex-col font-sans'>{children}</body>
+    </html>
   );
 }
