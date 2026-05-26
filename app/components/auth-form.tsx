@@ -4,6 +4,8 @@ import { useState } from "react";
 
 export function TextField({
   id,
+  value,
+  onChange,
   label,
   type = "text",
   placeholder,
@@ -15,7 +17,10 @@ export function TextField({
   type?: string;
   placeholder?: string;
   autoComplete?: string;
+  onChange: ({ target }: { target: { value: string } }) => void;
+
   required?: boolean;
+  value: string;
 }) {
   return (
     <div className='flex flex-col gap-2'>
@@ -26,6 +31,8 @@ export function TextField({
         {label}
       </label>
       <input
+        value={value}
+        onChange={onChange}
         id={id}
         name={id}
         type={type}
@@ -107,11 +114,24 @@ export function ShowPasswordCheckbox({
 
 export function SubmitButton({
   children,
+  loading,
   disabled,
 }: {
   children: React.ReactNode;
+  loading?: boolean;
   disabled?: boolean;
 }) {
+  if (loading) {
+    return (
+      <button
+        type='button'
+        disabled={true}
+        className='flex h-9 w-full items-center justify-center rounded-md bg-primary px-8 text-sm font-medium leading-5 text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-20'
+      >
+        Loading...
+      </button>
+    );
+  }
   return (
     <button
       type='submit'

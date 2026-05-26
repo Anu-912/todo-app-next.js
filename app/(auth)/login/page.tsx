@@ -1,3 +1,4 @@
+"use client ";
 import Link from "next/link";
 import { AuthFooter, AuthHeader } from "../../components/auth-layout";
 import {
@@ -5,12 +6,28 @@ import {
   SubmitButton,
   TextField,
 } from "../../components/auth-form";
-
-export const metadata = {
-  title: "Log in — NomNom",
-};
+import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function LoginPage() {
+  const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const handleSubmitForm = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setLoading(true);
+    axios
+      .post("/api/auth/otp")
+      .then((res) => {
+        setLoading(false);
+        alert(res.data.message);
+        router.push("login/otp?email=${email}");
+      })
+      .catch(({ response }) => {
+        alert(response.message);
+      });
+  };
   return (
     <>
       <AuthHeader
@@ -19,40 +36,23 @@ export default function LoginPage() {
       />
 
       <form
+        onSubmit={handleSubmitForm}
         className='flex flex-col gap-4'
-        action='/api/auth/login'
-        method='post'
       >
         <TextField
-          id='email'
-          label='Email'
-          type='email'
-          placeholder='Enter your email address'
-          autoComplete='email'
+          value={otp}
+          onChange={(e) => {
+            setOtp(e.target.value);
+          }}
+          id='otp'
+          label='OTP'
+          type='number'
+          placeholder='Enter your otp'
           required
         />
-        <PasswordField
-          id='password'
-          label='Password'
-          placeholder='Password'
-          autoComplete='current-password'
-        />
-        <div className='flex justify-end'>
-          <Link
-            href='/forgot-password'
-            className='text-sm text-[#2563eb] hover:underline'
-          >
-            Forgot password?
-          </Link>
-        </div>
-        <SubmitButton>{"Let's Go"}</SubmitButton>
-      </form>
 
-      <AuthFooter
-        prompt="Don't have an account?"
-        linkText='Sign up'
-        linkHref='/signup'
-      />
+        <SubmitButton loading={loading}>{"Let's Go"}</SubmitButton>
+      </form>
     </>
   );
 }

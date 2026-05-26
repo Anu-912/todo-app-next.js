@@ -11,7 +11,6 @@ export function AuthLayout({
   return (
     <main className='min-h-screen w-full bg-background'>
       <div className='mx-auto flex min-h-screen max-w-360 flex-col gap-8 px-6 py-10 lg:flex-row lg:items-center lg:gap-12 lg:px-25 lg:py-25'>
-        {/* Form column */}
         <div className='flex w-full max-w-104 flex-col gap-6 lg:flex-1'>
           <Link
             href={backHref}
@@ -37,7 +36,6 @@ export function AuthLayout({
           {children}
         </div>
 
-        {/* Image column */}
         <div className='relative hidden h-150 flex-1 overflow-hidden rounded-2xl lg:block lg:h-[calc(100vh-200px)] lg:max-h-226'>
           <Image
             src='/auth/rider.jpg'
