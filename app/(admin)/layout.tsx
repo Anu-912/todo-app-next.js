@@ -1,8 +1,8 @@
 "use client";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./sidebar";
-import { useUser } from "../user-provider";
 import { redirect } from "next/navigation";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useUser } from "../user-provider";
 
 export default function AdminLayout({
   children,

@@ -20,24 +20,26 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ message: "Invalid email" }, { status: 400 });
   }
 
-  let user = await prisma.user.findUnique({ where: { email: body.email } });
+  let user = await prisma.users.findUnique({
+    where: { useremail: body.email },
+  });
 
   const otp = generateOtp();
 
   const token = jwt.sign({ otp }, "SIGNING-OTP", { expiresIn: "5m" });
 
   if (!user) {
-    user = await prisma.user.create({
+    user = await prisma.users.create({
       data: {
-        email: body.email,
+        useremail: body.email,
         otp: token,
         otpTries: 0,
       },
     });
   } else {
-    user = await prisma.user.update({
+    user = await prisma.users.update({
       where: {
-        email: body.email,
+        useremail: body.email,
       },
       data: {
         otp: token,

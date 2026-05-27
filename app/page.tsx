@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
+import { Header } from "./components/Header";
+import { Menu } from "./components/menu";
+import { Footer } from "./components/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,11 +27,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang='en'
-      className={`${inter.variable} ${bebas.variable} h-full antialiased`}
-    >
-      <body className='min-h-full flex flex-col font-sans'>{children}</body>
+    <html lang='en'>
+      <body>
+        {children}
+        <Header />
+        <Menu />
+        <Footer />
+      </body>
     </html>
   );
 }

@@ -24,7 +24,9 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ message: "Invalid OTP" }, { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({ where: { email: body.email } });
+  const user = await prisma.users.findUnique({
+    where: { useremail: body.email },
+  });
 
   if (!user) {
     return NextResponse.json({ message: "Email not found" }, { status: 404 });
@@ -35,8 +37,8 @@ export const POST = async (req: NextRequest) => {
   try {
     const payload = jwt.verify(user.otp!, "SIGNING-OTP") as { otp: string };
     if (payload.otp !== body.otp) {
-      await prisma.user.update({
-        where: { email: body.email },
+      await prisma.users.update({
+        where: { useremail: body.email },
         data: { otpTries: user.otpTries + 1 },
       });
       return NextResponse.json({ message: "Invalid OTP" }, { status: 404 });
