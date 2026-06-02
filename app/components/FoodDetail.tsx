@@ -1,7 +1,16 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Foods } from "../generated/prisma/client";
 
-export const FoodDetail = ({ card }: { card: Foods }) => {
+export const FoodDetail = ({
+  card,
+  onClose,
+}: {
+  card: Foods;
+  onClose: () => void;
+}) => {
+  const [quantity, setQuantity] = useState(1);
+
   return (
     <div className='flex w-[826px] h-103 p-6 gap-6 rounded-[20px] bg-white'>
       <img
@@ -10,7 +19,10 @@ export const FoodDetail = ({ card }: { card: Foods }) => {
         alt={card.foodName}
       />
       <div className='flex-col'>
-        <button className='w-9 h-9 rounded-full items-center justify-center '>
+        <button
+          onClick={onClose}
+          className='w-9 h-9 rounded-full items-center justify-center '
+        >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             width='16'
@@ -37,14 +49,18 @@ export const FoodDetail = ({ card }: { card: Foods }) => {
           </div>
           <div className='flex'>
             <button
-              onClick={}
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               className='border-black mx-3 border-solid border-[1px] w-11 h-11  flex justify-center  items-center '
             >
               -
             </button>
-            <input type='number' />
+            <input
+              type='number'
+              value={quantity}
+              readOnly
+            />
             <button
-              onClick={}
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               className='border-black mx-3 border-solid border-[1px] w-11 h-11  flex justify-center  items-center '
             >
               +
@@ -52,7 +68,7 @@ export const FoodDetail = ({ card }: { card: Foods }) => {
           </div>
         </div>
         <button
-          onClick={}
+          onClick={() => alert(`Added ${quantity}*${card.foodName} to cart! `)}
           className='bg-black rounded-full flex items-center px-8 py-2 '
         >
           <p className='text-white text-[14px] font-medium'></p>

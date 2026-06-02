@@ -1,26 +1,20 @@
 import Image from "next/image";
+import { Foods } from "../generated/prisma/client";
 
-export type Product = {
-  name: string;
-  description: string;
-  price: string;
-  image: string;
-};
-
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product }: { product: Foods }) {
   return (
     <article className='flex flex-col gap-5 rounded-[20px] bg-white p-4'>
       <div className='relative aspect-[4/3] w-full overflow-hidden rounded-xl'>
         <Image
           src={product.image}
-          alt={product.name}
+          alt={product.foodName}
           fill
           sizes='(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw'
           className='object-cover'
         />
         <button
           type='button'
-          aria-label={`Add ${product.name} to cart`}
+          aria-label={`Add ${product.foodName} to cart`}
           className='absolute right-5 bottom-5 flex size-11 items-center justify-center rounded-full bg-white text-accent-soft shadow-sm transition hover:scale-105'
         >
           <svg
@@ -42,14 +36,14 @@ export function ProductCard({ product }: { product: Product }) {
       <div className='flex flex-col gap-2'>
         <div className='flex items-center gap-2.5'>
           <h3 className='flex-1 text-[24px] font-semibold leading-8 tracking-tight text-accent-soft'>
-            {product.name}
+            {product.foodName}
           </h3>
           <span className='text-[18px] font-semibold leading-7 text-foreground'>
             {product.price}
           </span>
         </div>
         <p className='text-sm leading-5 text-foreground'>
-          {product.description}
+          {product.foodDescription}
         </p>
       </div>
     </article>

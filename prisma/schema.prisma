@@ -48,7 +48,7 @@ model FoodCategories {
   id           String         @id @default(nanoid())
   foodName     String
   price        Float
-  image        String?
+  image        String
   ingredients  String?
   foodDescription String ?
   categoryId   String
