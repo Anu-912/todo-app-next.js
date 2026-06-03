@@ -1,7 +1,18 @@
 import Image from "next/image";
 import { Foods } from "../generated/prisma/client";
+import { useCartStore } from "../cart/cart-store";
 
 export function ProductCard({ product }: { product: Foods }) {
+  const addItem = useCartStore((state) => state.addItem);
+  const priceNumber = parseFloat(String(product.price).replace(/[^0-9.]/g, ""));
+  const handleQuickAdd = () => {
+    addItem({
+      id: String(product.id),
+      foodName: product.foodName,
+      price: priceNumber,
+      image: product.image,
+    });
+  };
   return (
     <article className='flex flex-col gap-5 rounded-[20px] bg-white p-4'>
       <div className='relative aspect-[4/3] w-full overflow-hidden rounded-xl'>
@@ -13,6 +24,7 @@ export function ProductCard({ product }: { product: Foods }) {
           className='object-cover'
         />
         <button
+          onClick={handleQuickAdd}
           type='button'
           aria-label={`Add ${product.foodName} to cart`}
           className='absolute right-5 bottom-5 flex size-11 items-center justify-center rounded-full bg-white text-accent-soft shadow-sm transition hover:scale-105'

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Foods } from "../generated/prisma/client";
+import { useCartStore } from "../cart/cart-store";
 
 export const FoodDetail = ({
   card,
@@ -10,12 +11,25 @@ export const FoodDetail = ({
   onClose: () => void;
 }) => {
   const [quantity, setQuantity] = useState(1);
+  const addItem = useCartStore((state) => state.addItem);
+  const priceNumber = parseFloat(String(card.price).replace(/[^0-9.]/g, ""));
+  const handleAddToCart = () => {
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        id: card.id,
+        foodName: card.foodName,
+        price: priceNumber,
+        image: card.image,
+      });
+    }
+    onClose();
+  };
 
   return (
     <div className='flex w-[826px] h-103 p-6 gap-6 rounded-[20px] bg-white'>
       <img
         className='rounded-xl bg-no-repeat bg-cover'
-        src={"card.image"}
+        src={card.image}
         alt={card.foodName}
       />
       <div className='flex-col'>
@@ -45,7 +59,9 @@ export const FoodDetail = ({
         <div className='flex justify-between'>
           <div>
             <p className='text-[16px] font-light'>Total price</p>
-            <p className='text-[24px] font-semibold'>{card.price}</p>
+            <p className='text-[24px] font-semibold'>
+              ${(priceNumber * quantity).toFixed(2)}
+            </p>
           </div>
           <div className='flex'>
             <button
@@ -68,10 +84,12 @@ export const FoodDetail = ({
           </div>
         </div>
         <button
-          onClick={() => alert(`Added ${quantity}*${card.foodName} to cart! `)}
+          onClick={handleAddToCart}
           className='bg-black rounded-full flex items-center px-8 py-2 '
         >
-          <p className='text-white text-[14px] font-medium'></p>
+          <p className='text-white text-[14px] font-medium'>
+            Add to Cart · ${(priceNumber * quantity).toFixed(2)}
+          </p>
         </button>
       </div>
     </div>

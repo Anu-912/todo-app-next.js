@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "./components/Header";
-import { Menu } from "./components/menu";
 import { Footer } from "./components/Footer";
 
 const inter = Inter({
@@ -31,7 +30,6 @@ export default function RootLayout({
       <body>
         {children}
         <Header />
-        <Menu />
         <Footer />
       </body>
     </html>

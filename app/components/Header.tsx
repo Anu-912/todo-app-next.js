@@ -2,6 +2,7 @@ import React from "react";
 import { FoodLogo } from "../icons/FoodLogo";
 import { Nomnom } from "../icons/Nomnom";
 import Link from "next/link";
+import { CartSheet } from "./cart-sheet";
 
 export const Header = () => {
   return (
@@ -28,6 +29,7 @@ export const Header = () => {
           {" "}
           <p className='font-medium text-[14px] text-white'>Login</p>
         </Link>
+        <CartSheet />
       </div>
     </div>
   );
