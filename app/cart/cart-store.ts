@@ -11,11 +11,11 @@ export type CartItem = {
 
 type CartStore = {
   items: CartItem[];
-  addItem: (item: Omit<CartItem, "quantity">) => void; // add or increase qty
-  removeItem: (id: string) => void; // delete item completely
-  increaseQty: (id: string) => void; // press + button
-  decreaseQty: (id: string) => void; // press - button (remove if reaches 0)
-  clearCart: () => void; // empty the whole cart
+  addItem: (item: Omit<CartItem, "quantity">) => void;
+  removeItem: (id: string) => void;
+  increaseQty: (id: string) => void;
+  decreaseQty: (id: string) => void;
+  clearCart: () => void;
   totalItems: () => number;
   totalPrice: () => number;
 };
