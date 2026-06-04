@@ -1,97 +1,133 @@
 "use client";
-import React, { useState } from "react";
-import { Foods } from "../generated/prisma/client";
-import { useCartStore } from "../cart/cart-store";
 
-export const FoodDetail = ({
-  card,
-  onClose,
-}: {
-  card: Foods;
+import { useState, useEffect } from "react";
+import { X, Minus, Plus } from "lucide-react";
+import Image from "next/image";
+
+interface FoodDetailModalProps {
+  isOpen: boolean;
   onClose: () => void;
-}) => {
+  // Using the same loose object structure as the FoodCard to prevent future data conflicts
+  food: {
+    id?: string;
+    foodName: string;
+    price: number;
+    image: string;
+    ingredients?: string | null;
+    foodDescription?: string | null;
+  } | null;
+  onAddToCart: (quantity: number) => void;
+}
+
+export default function FoodDetail({
+  isOpen,
+  onClose,
+  food,
+  onAddToCart,
+}: FoodDetailModalProps) {
   const [quantity, setQuantity] = useState(1);
-  const addItem = useCartStore((state) => state.addItem);
-  const priceNumber = parseFloat(String(card.price).replace(/[^0-9.]/g, ""));
-  const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addItem({
-        id: card.id,
-        foodName: card.foodName,
-        price: priceNumber,
-        image: card.image,
-      });
+
+  // Reset the item counter back to 1 every time a fresh item details view opens up
+  useEffect(() => {
+    if (isOpen) {
+      setQuantity(1);
     }
-    onClose();
-  };
+  }, [isOpen, food]);
+
+  if (!isOpen || !food) return null;
+
+  const { foodName, price, image, ingredients, foodDescription } = food;
+
+  const handleIncrement = () => setQuantity((prev) => prev + 1);
+  const handleDecrement = () =>
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+
+  // Live total price evaluation based on current counter state
+  const totalPrice = price * quantity;
+  const descriptionText =
+    ingredients || foodDescription || "No item details are available.";
 
   return (
-    <div className='flex w-[826px] h-103 p-6 gap-6 rounded-[20px] bg-white'>
-      <img
-        className='rounded-xl bg-no-repeat bg-cover'
-        src={card.image}
-        alt={card.foodName}
-      />
-      <div className='flex-col'>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      {/* Main Modal Panel (White background layout card) */}
+      <div className="relative bg-white rounded-[24px] max-w-2xl w-full flex flex-col md:flex-row overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+        {/* Absolute Floating X Dismiss Icon Button */}
         <button
           onClick={onClose}
-          className='w-9 h-9 rounded-full items-center justify-center '
+          className="absolute top-4 right-4 z-20 bg-white rounded-full p-1.5 shadow-md hover:bg-zinc-100 transition text-zinc-500 active:scale-90"
         >
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            width='16'
-            height='16'
-            viewBox='0 0 16 16'
-            fill='none'
-          >
-            <path
-              d='M12 4L4 12M4 4L12 12'
-              stroke='#18181B'
-              stroke-linecap='round'
-              stroke-linejoin='round'
-            />
-          </svg>
+          <X size={16} strokeWidth={2.5} />
         </button>
-        <p className='text-[30px] font-semibold text-red-500'>
-          Sunshine Stackers{" "}
-        </p>
-        <p className='text-[16px] font-light'>{card.foodDescription}</p>
-        <div className='flex justify-between'>
-          <div>
-            <p className='text-[16px] font-light'>Total price</p>
-            <p className='text-[24px] font-semibold'>
-              ${(priceNumber * quantity).toFixed(2)}
+
+        {/* Left Aspect Side Block: Core Dynamic Food Banner Image */}
+        <div className="relative w-full md:w-1/2 h-52 md:h-auto min-h-[260px] bg-zinc-100">
+          <Image
+            src={image || "/placeholder-food.jpg"}
+            alt={foodName}
+            fill
+            unoptimized
+            className="object-cover"
+          />
+        </div>
+
+        {/* Right Content Block: Title metadata info, descriptions & cart actions */}
+        <div className="w-full md:w-1/2 p-6 flex flex-col justify-between bg-white text-black">
+          {/* Upper Title Block Context Section */}
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-[#EF4444] mb-2 tracking-tight leading-snug">
+              {foodName}
+            </h2>
+            <p className="text-[11px] text-zinc-500 leading-relaxed max-h-[120px] overflow-y-auto pr-1">
+              {descriptionText}
             </p>
           </div>
-          <div className='flex'>
+
+          {/* Lower interactive Counter Control Section */}
+          <div>
+            {/* Row Information Panel */}
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <span className="text-[10px] text-zinc-400 block uppercase font-bold tracking-wider">
+                  Total price
+                </span>
+                <span className="text-lg font-black text-black tracking-tight">
+                  ${totalPrice.toFixed(2)}
+                </span>
+              </div>
+
+              {/* Dynamic Adjustable Counter Interface Badge */}
+              <div className="flex items-center gap-3 border border-zinc-200 rounded-full px-3 py-1.5 bg-zinc-50/50">
+                <button
+                  onClick={handleDecrement}
+                  className="text-zinc-400 hover:text-black transition-colors p-0.5 active:scale-75"
+                >
+                  <Minus size={14} strokeWidth={3} />
+                </button>
+                <span className="font-bold text-xs w-4 text-center select-none">
+                  {quantity}
+                </span>
+                <button
+                  onClick={handleIncrement}
+                  className="text-zinc-400 hover:text-black transition-colors p-0.5 active:scale-75"
+                >
+                  <Plus size={14} strokeWidth={3} />
+                </button>
+              </div>
+            </div>
+
+            {/* Black Submit Action Add Button */}
             <button
-              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className='border-black mx-3 border-solid border-[1px] w-11 h-11  flex justify-center  items-center '
+              onClick={() => {
+                onAddToCart(quantity);
+                onClose();
+              }}
+              className="w-full bg-[#181818] text-white text-xs font-semibold py-3 rounded-full hover:bg-black active:scale-[0.99] transition-all duration-150 shadow-md shadow-zinc-900/10"
             >
-              -
-            </button>
-            <input
-              type='number'
-              value={quantity}
-              readOnly
-            />
-            <button
-              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className='border-black mx-3 border-solid border-[1px] w-11 h-11  flex justify-center  items-center '
-            >
-              +
+              Add to cart
             </button>
           </div>
         </div>
-        <button
-          onClick={handleAddToCart}
-          className='bg-black rounded-full flex items-center px-8 py-2 '
-        >
-          <p className='text-white text-[14px] font-medium'>
-            Add to Cart · ${(priceNumber * quantity).toFixed(2)}
-          </p>
-        </button>
       </div>
     </div>
   );
-};
+}
