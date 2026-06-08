@@ -1,59 +1,86 @@
-// components/FoodCard.tsx
 import Image from "next/image";
-import { Plus } from "lucide-react";
-
-// 1. Define and export the exact object shape the card needs
-export interface CardFoodItem {
-  id: string;
-  foodName: string;
-  price: number;
-  image: string;
-  ingredients?: string | null;
-  foodDescription?: string | null;
-  categoryName?: string;
-}
+import { Foods } from "../generated/prisma/client";
+import { useState } from "react";
+import FoodDetail from "./FoodDetail";
 
 interface FoodCardProps {
-  item: CardFoodItem;
+  item: Foods;
   onClick: () => void;
 }
 
 export default function FoodCard({ item, onClick }: FoodCardProps) {
   const { foodName, price, image, ingredients, foodDescription } = item;
-  const displayDescription =
+  const description =
     ingredients || foodDescription || "No description provided.";
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevents the card click from triggering
+    console.log("Added to cart instantly:", foodName);
+    // Add your cart logic here (e.g., Zustand store or Context)
+  };
 
   return (
-    <div
-      onClick={onClick}
-      className="bg-white rounded-[24px] p-4 shadow-md flex flex-col gap-3 group transition-transform duration-200 active:scale-95 hover:scale-[1.01] select-none cursor-pointer"
+    <article
+      onClick={() => setIsDetailOpen(true)}
+      className="flex flex-col gap-5 rounded-[20px] bg-white p-4 cursor-pointer transition hover:shadow-lg"
     >
-      <div className="relative w-full aspect-[4/3] rounded-[16px] overflow-hidden bg-zinc-100">
+      {/* Image container using your ProductCard style */}
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
         <Image
-          src={image || "/placeholder-food.jpg"}
+          src={image || "/placeholder.jpg"}
           alt={foodName}
           fill
-          unoptimized
-          sizes="(max-w-7xl) 25vw, 50vw"
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+          className="object-cover"
         />
-        <div className="absolute bottom-3 right-3 bg-white hover:bg-zinc-100 border border-zinc-100 shadow-sm rounded-full p-2 text-black cursor-pointer transition-colors z-10">
-          <Plus size={16} strokeWidth={3} />
+
+        {/* Plus button using your ProductCard style */}
+        <button
+          onClick={handleQuickAdd}
+          type="button"
+          aria-label={`Add ${foodName} to cart`}
+          className="absolute right-5 bottom-5 flex size-11 items-center justify-center rounded-full bg-white text-accent-soft shadow-sm transition hover:scale-105"
+        >
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            className="size-4"
+            aria-hidden="true"
+          >
+            <path
+              d="M8 3v10M3 8h10"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      {/* Info section using your ProductCard style */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2.5">
+          <h3 className="flex-1 text-[24px] font-semibold leading-8 tracking-tight text-accent-soft">
+            {foodName}
+          </h3>
+          <span className="text-[18px] font-semibold leading-7 text-foreground">
+            ${price.toFixed(2)}
+          </span>
         </div>
+        <p className="text-sm leading-5 text-foreground line-clamp-2">
+          {description}
+        </p>
       </div>
-
-      <div className="flex justify-between items-start px-0.5 gap-2">
-        <h3 className="font-bold text-[#EF4444] text-sm leading-tight line-clamp-1 tracking-tight flex-1">
-          {foodName}
-        </h3>
-        <span className="font-black text-black text-sm whitespace-nowrap">
-          ${price.toFixed(2)}
-        </span>
-      </div>
-
-      <p className="text-[11px] text-zinc-500 line-clamp-2 leading-relaxed px-0.5 min-h-[32px]">
-        {displayDescription}
-      </p>
-    </div>
+      <FoodDetail
+        isOpen={isDetailOpen}
+        food={prod}
+        onClose={() => setIsDetailOpen(false)}
+        onAddToCart={(quantity) => {
+          console.log(`Adding ${quantity} of ${foodName} to cart`);
+          // Add your cart logic here
+        }}
+      />
+    </article>
   );
 }

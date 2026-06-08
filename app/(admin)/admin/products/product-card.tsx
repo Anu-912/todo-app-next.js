@@ -1,36 +1,63 @@
+"use client";
 import Image from "next/image";
-import { Pencil } from "lucide-react";
-import { Foods } from "@/app/generated/prisma/client";
 
-export function ProductCard({ food }: { food: Foods }) {
+// Using the Prisma-style fields directly
+export interface FoodProduct {
+  id: string;
+  foodName: string;
+  foodDescription?: string | null;
+  ingredients?: string | null;
+  price: number | string;
+  image: string;
+}
+
+export function ProductCard({ product }: { product: FoodProduct }) {
   return (
-    <article className="flex h-60.25 flex-col gap-5 rounded-[20px] border border-border bg-background p-4">
-      <div className="relative flex-1 overflow-hidden rounded-xl">
+    <article className="flex flex-col gap-5 rounded-[20px] bg-white p-4 transition-all hover:shadow-lg">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-zinc-100">
         <Image
-          src={food.image}
-          alt={food.foodName}
+          src={product.image || "/placeholder-food.jpg"}
+          alt={product.foodName}
           fill
-          sizes="(min-width: 1280px) 270px, (min-width: 640px) 50vw, 100vw"
-          className="object-cover"
+          unoptimized
+          sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+          className="object-cover transition-transform duration-300 hover:scale-105"
         />
         <button
           type="button"
-          aria-label={`Edit ${food.foodName}`}
-          className="absolute right-5 bottom-5 flex size-11 items-center justify-center rounded-full bg-background text-red-500 shadow-sm transition hover:scale-105"
+          aria-label={`Add ${product.foodName} to cart`}
+          className="absolute right-5 bottom-5 flex size-11 items-center justify-center rounded-full bg-white text-accent-soft shadow-sm transition hover:scale-105 z-10"
         >
-          <Pencil className="size-4" />
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            className="size-4"
+            aria-hidden="true"
+          >
+            <path
+              d="M8 3v10M3 8h10"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+          </svg>
         </button>
       </div>
+
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2.5">
-          <h4 className="flex-1 text-sm font-medium leading-5 text-red-500">
-            {food.foodName}
-          </h4>
-          <span className="text-xs leading-4 text-foreground">
-            {food.price}
+          <h3 className="flex-1 text-[24px] font-semibold leading-8 tracking-tight text-accent-soft line-clamp-1">
+            {product.foodName}
+          </h3>
+          <span className="text-[18px] font-semibold leading-7 text-foreground">
+            ${Number(product.price).toFixed(2)}
           </span>
         </div>
-        <p className="text-xs leading-4 text-foreground">{food.ingredients}</p>
+        <p className="text-sm leading-5 text-foreground line-clamp-2">
+          {product.foodDescription ||
+            product.ingredients ||
+            "No description available."}
+        </p>
       </div>
     </article>
   );

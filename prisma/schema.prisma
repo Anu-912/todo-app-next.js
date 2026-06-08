@@ -7,32 +7,19 @@ datasource db {
   provider = "postgresql"
 }
 
-enum UserRole {
-  USER
-  ADMIN
-  
-}
-
-enum FoodOrderStatus {
-  PENDING
-  CANCELED
-  DELIVERED
-}
-
 model Users {
-  id           String          @id @default(nanoid())
-  useremail    String          @unique
-   otp         String?
-  otpTries    Int      @default(0)
-  phoneNumber  String?
-  address      String?
-  role         UserRole        @default(USER)
-  ttl          DateTime?
-  isVerified   Boolean         @default(false)
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
-
-  foodOrders   FoodOrders[]
+  id          String       @id @default(nanoid())
+  useremail   String       @unique
+  otp         String?
+  otpTries    Int          @default(0)
+  phoneNumber String?
+  address     String?
+  role        UserRole     @default(USER)
+  ttl         DateTime?
+  isVerified  Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  foodOrders  FoodOrders[]
 }
 
 model FoodCategories {
@@ -40,22 +27,20 @@ model FoodCategories {
   categoryName String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
   foods        Foods[]
 }
 
- model Foods {
-  id           String         @id @default(nanoid())
-  foodName     String
-  price        Float
-  image        String
-  ingredients  String?
-  foodDescription String ?
-  categoryId   String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-
-  category     FoodCategories @relation(fields: [categoryId], references: [id])
+model Foods {
+  id              String         @id @default(nanoid())
+  foodName        String
+  price           Float
+  image           String?
+  ingredients     String?
+  foodDescription String?
+  categoryId      String
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  category        FoodCategories @relation(fields: [categoryId], references: [id])
 }
 
 model FoodOrders {
@@ -66,6 +51,16 @@ model FoodOrders {
   status         FoodOrderStatus @default(PENDING)
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
-
   user           Users           @relation(fields: [userId], references: [id])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum FoodOrderStatus {
+  PENDING
+  CANCELED
+  DELIVERED
 }

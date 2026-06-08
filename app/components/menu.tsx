@@ -59,7 +59,7 @@ export default function Menu({ foods }: MenuProps) {
       {categories.map((category) => {
         // Filters your raw DB input arrays by current category iteration context
         const categoryFoods = foods.filter(
-          (item) => item.categoryName.toLowerCase() === category.toLowerCase(),
+          (item) => item.categoryName === category,
         );
 
         // Safely skips showing a section entirely if it contains zero active dishes

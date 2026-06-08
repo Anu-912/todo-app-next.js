@@ -14,11 +14,13 @@ export const Header = () => {
         </div>
       </div>
       <div className="flex gap-[13px]">
-        <Link className="bg-white rounded-full px-3 py-2 " href="/">
+        {/* 1. Point href to your /signup folder route */}
+        <Link className="bg-white rounded-full px-3 py-2 " href="/signup">
           {" "}
           <p className="font-medium text-[14px] text-black">Sign up</p>
         </Link>
-        <Link className="bg-red-500 rounded-full px-3 py-2 " href="/">
+        {/* 2. Point href to your /login folder route */}
+        <Link className="bg-red-500 rounded-full px-3 py-2 " href="/login">
           {" "}
           <p className="font-medium text-[14px] text-white">Login</p>
         </Link>
