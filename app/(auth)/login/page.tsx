@@ -22,7 +22,7 @@ export default function LoginPage() {
       .then((res) => {
         setLoading(false);
         alert(res.data.message);
-        router.push("login/otp?email=${email}");
+        router.push("login/otp?email=${useremail}");
       })
       .catch(({ response }) => {
         alert(response.message);
@@ -31,23 +31,20 @@ export default function LoginPage() {
   return (
     <>
       <AuthHeader
-        title='Welcome back'
-        subtitle='Log in to keep ordering your favorite dishes.'
+        title="Welcome back"
+        subtitle="Log in to keep ordering your favorite dishes."
       />
 
-      <form
-        onSubmit={handleSubmitForm}
-        className='flex flex-col gap-4'
-      >
+      <form onSubmit={handleSubmitForm} className="flex flex-col gap-4">
         <TextField
           value={otp}
           onChange={(e) => {
             setOtp(e.target.value);
           }}
-          id='otp'
-          label='OTP'
-          type='number'
-          placeholder='Enter your otp'
+          id="otp"
+          label="OTP"
+          type="number"
+          placeholder="Enter your otp"
           required
         />
 

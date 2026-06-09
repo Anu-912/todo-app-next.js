@@ -23,24 +23,21 @@ export default function LoginPage() {
   return (
     <>
       <AuthHeader
-        title='Welcome back'
-        subtitle='Log in to keep ordering your favorite dishes.'
+        title="Welcome back"
+        subtitle="Log in to keep ordering your favorite dishes."
       />
 
-      <form
-        className='flex flex-col gap-4'
-        onSubmit={handleSubmitForm}
-      >
+      <form className="flex flex-col gap-4" onSubmit={handleSubmitForm}>
         <TextField
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
-          id='email'
-          label='Email'
-          type='email'
-          placeholder='Enter your email address'
-          autoComplete='email'
+          id="email"
+          label="Email"
+          type="email"
+          placeholder="Enter your email address"
+          autoComplete="email"
           required
         />
         <SubmitButton loading={loading}>{"Let's Go"}</SubmitButton>

@@ -1,5 +1,5 @@
 import { CategoryForm } from "@/app/components/category-from";
-import { DishCard } from "@/app/components/DishCard";
+import { DishCard } from "@/app/(admin)/admin/products/DishCard";
 import { FoodForm } from "@/app/components/Food-form";
 import { prisma } from "@/libs/prisma";
 

@@ -1,6 +1,6 @@
 import { AddDishCard } from "./add-dish-card";
 import { FoodCategoryWithFoods } from "./page";
-import { ProductCard } from "./product-card";
+import { ProductCard } from "../../../components/product-card";
 
 export function ProductSection({
   category,

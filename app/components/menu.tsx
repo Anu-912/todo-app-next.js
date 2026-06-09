@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Check } from "lucide-react";
-import FoodCard from "./FoodCard";
-import FoodDetailModal from "./FoodDetail";
+import { FoodDetail } from "./FoodDetail";
+import { ProductCard } from "./product-card";
 
 // Match this to the structural fields coming from your MenuProps array
 interface FoodItem {
@@ -57,28 +57,20 @@ export default function Menu({ foods }: MenuProps) {
 
       {/* Main Menu Map Wrapper Loop */}
       {categories.map((category) => {
-        // Filters your raw DB input arrays by current category iteration context
-        const categoryFoods = foods.filter(
-          (item) => item.categoryName === category,
-        );
-
-        // Safely skips showing a section entirely if it contains zero active dishes
+        const categoryFoods = foods.filter((f) => f.categoryName === category);
         if (categoryFoods.length === 0) return null;
 
         return (
           <section key={category} className="scroll-mt-24 mb-14">
-            {/* Section Header Title */}
             <h2 className="text-xl font-bold mb-6 px-2 text-zinc-100 border-l-4 border-brand-red pl-3 tracking-tight">
               {category}
             </h2>
 
-            {/* Core Responsive Cards Layout Grid container frame */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {categoryFoods.map((food) => (
-                <FoodCard
+                <ProductCard
                   key={food.id}
-                  item={food}
-                  onClick={() => handleCardClick(food)}
+                  product={food} // Pass the entire food object here
                 />
               ))}
             </div>
@@ -87,7 +79,7 @@ export default function Menu({ foods }: MenuProps) {
       })}
 
       {/* Pop-out overlay Detail Dialog Modal portal display structure */}
-      <FoodDetailModal
+      <FoodDetail
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         food={selectedFood}

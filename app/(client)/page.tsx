@@ -1,6 +1,6 @@
 // app/(client)/page.tsx (or your main layout page)
 import React from "react";
-import { ProductCard } from "../(admin)/admin/products/product-card";
+import { ProductCard } from "../components/product-card";
 
 // 1. Create the fetch helper
 async function getMenuData() {

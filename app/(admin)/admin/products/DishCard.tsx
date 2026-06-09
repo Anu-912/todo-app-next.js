@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { DeleteButton } from "./Deletebutton";
-import { Modal } from "../(admin)/admin/components/modal";
-import { EditFoodForm } from "../(admin)/admin/components/edit-food-from";
+import { DeleteButton } from "../../../components/Deletebutton";
+import { Modal } from "../components/modal";
+import { EditFoodForm } from "../components/edit-food-from";
 
 export function DishCard({ food }: { food: any }) {
   const [isEditing, setIsEditing] = useState(false);
